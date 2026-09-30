@@ -237,27 +237,105 @@
       overflow: hidden;
       box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.9), 0 0 35px rgba(37, 99, 235, 0.08);
       text-align: left;
+    /* Native Install Section (Stacked) */
+    .install-section {
+      max-width: 860px;
+      margin: 0 auto 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: left;
     }
 
-    .terminal-header {
-      background: rgba(255, 255, 255, 0.02);
-      border-bottom: 1px solid var(--border);
-      padding: 0.85rem 1.6rem;
+    .install-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.75);
+      transition: all 0.2s ease;
+    }
+
+    .install-block:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: #0d0f15;
+    }
+
+    .install-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 0.85rem;
     }
 
-    .terminal-tabs {
+    .install-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e5e7eb;
       display: flex;
-      gap: 0.5rem;
+      align-items: center;
+      gap: 0.65rem;
     }
 
-    .t-tab-btn {
-      background: transparent;
-      border: 1px solid transparent;
-      color: var(--text-muted);
-      padding: 0.4rem 0.85rem;
+    .install-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--blue-accent);
+    }
+
+    .install-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #94a3b8;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.2rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .install-command-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+    }
+
+    .code-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      overflow-x: auto;
+    }
+
+    .prompt-symbol {
+      color: var(--text-sub);
+      user-select: none;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+    }
+
+    .code-target {
+      color: #ffffff;
+      user-select: all;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+    }
+
+    .btn-copy {
+      background: var(--blue);
+      border: 1px solid var(--blue-accent);
+      color: #ffffff;
+      padding: 0.5rem 1rem;
       border-radius: 8px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.8rem;
@@ -267,107 +345,12 @@
       align-items: center;
       gap: 0.45rem;
       transition: all 0.2s;
-    }
-
-    .t-tab-btn:hover {
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .t-tab-btn.active {
-      color: #ffffff;
-      background: rgba(37, 99, 235, 0.2);
-      border-color: rgba(59, 130, 246, 0.4);
-    }
-
-    .terminal-left {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .terminal-icon {
-      color: var(--blue-accent);
-      display: flex;
-      align-items: center;
-    }
-
-    .terminal-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #e5e7eb;
-      letter-spacing: -0.01em;
-    }
-
-    .terminal-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #93c5fd;
-      background: rgba(37, 99, 235, 0.12);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      padding: 0.25rem 0.75rem;
-      border-radius: 6px;
-    }
-
-    .terminal-content {
-      padding: 1.75rem 1.6rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 1.05rem;
-    }
-
-    .terminal-command-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1.25rem;
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid var(--border);
-      padding: 1.35rem 1.6rem;
-      border-radius: 12px;
-    }
-
-    .code-line {
-      display: flex;
-      align-items: center;
-      gap: 0.85rem;
-      overflow-x: auto;
-    }
-
-    .prompt-symbol {
-      color: var(--text-sub);
-      user-select: none;
-      font-weight: 700;
-    }
-
-    .code-target {
-      color: #ffffff;
-      user-select: all;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-    }
-
-    .btn-copy {
-      background: var(--blue);
-      border: 1px solid var(--blue-accent);
-      color: #ffffff;
-      padding: 0.65rem 1.25rem;
-      border-radius: 9px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
       white-space: nowrap;
     }
 
     .btn-copy:hover {
       background: #1d4ed8;
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 0 16px rgba(37, 99, 235, 0.4);
     }
 
     .terminal-instructions {
@@ -586,39 +569,81 @@
           ApiPatch reads OpenAPI 3.x and GraphQL SDL contracts, diffs semantic breaking changes, and rewrites consumer call-sites and MSW mocks before changes hit production.
         </p>
 
-        <!-- Multi-Platform Terminal Box -->
-        <div class="terminal-card" id="quickstart">
-          <div class="terminal-header">
-            <div class="terminal-tabs">
-              <button class="t-tab-btn active" id="tab-ps" onclick="selectPlatform('ps')">Windows (PowerShell)</button>
-              <button class="t-tab-btn" id="tab-bash" onclick="selectPlatform('bash')">macOS, Linux, WSL</button>
-              <button class="t-tab-btn" id="tab-cmd" onclick="selectPlatform('cmd')">Windows (CMD)</button>
-            </div>
-            <span class="terminal-tag" id="platform-tag">Standalone Binary · x64 / arm64</span>
-          </div>
-
-          <div class="terminal-content">
-            <div class="terminal-command-bar">
-              <div class="code-line">
-                <span class="prompt-symbol" id="prompt-symbol">PS &gt;</span>
-                <code class="code-target" id="install-cmd">irm https://apipatch.fix2ship.dev/install.ps1 | iex</code>
+        <!-- Stacked Native Install Blocks -->
+        <div class="install-section" id="quickstart">
+          
+          <!-- 1. macOS, Linux, WSL -->
+          <div class="install-block">
+            <div class="install-header">
+              <div class="install-title">
+                <span class="install-dot"></span>
+                <span>macOS, Linux, WSL</span>
               </div>
-              <button class="btn-copy" onclick="copyInstallCmd()">
+              <span class="install-tag">bash / zsh · x64 & arm64</span>
+            </div>
+            <div class="install-command-bar">
+              <div class="code-line">
+                <span class="prompt-symbol">$</span>
+                <code class="code-target" id="cmd-bash">curl -fsSL https://apipatch.fix2ship.dev/install.sh | bash</code>
+              </div>
+              <button class="btn-copy" onclick="copySnippet('cmd-bash', this)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                 </svg>
-                <span id="copy-label">Copy</span>
+                <span>Copy</span>
               </button>
             </div>
-            <div class="terminal-instructions" id="terminal-note">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-              <span>Installs binary to <code>$HOME\.apipatch\bin</code> and registers user environment <code>PATH</code> automatically.</span>
+          </div>
+
+          <!-- 2. Windows PowerShell -->
+          <div class="install-block">
+            <div class="install-header">
+              <div class="install-title">
+                <span class="install-dot"></span>
+                <span>Windows PowerShell</span>
+              </div>
+              <span class="install-tag">powershell · x64</span>
+            </div>
+            <div class="install-command-bar">
+              <div class="code-line">
+                <span class="prompt-symbol">PS &gt;</span>
+                <code class="code-target" id="cmd-ps">irm https://apipatch.fix2ship.dev/install.ps1 | iex</code>
+              </div>
+              <button class="btn-copy" onclick="copySnippet('cmd-ps', this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
             </div>
           </div>
+
+          <!-- 3. Windows CMD -->
+          <div class="install-block">
+            <div class="install-header">
+              <div class="install-title">
+                <span class="install-dot"></span>
+                <span>Windows CMD</span>
+              </div>
+              <span class="install-tag">cmd.exe · x64</span>
+            </div>
+            <div class="install-command-bar">
+              <div class="code-line">
+                <span class="prompt-symbol">C:\&gt;</span>
+                <code class="code-target" id="cmd-cmd">curl -fsSL https://apipatch.fix2ship.dev/install.cmd -o install.cmd && install.cmd && del install.cmd</code>
+              </div>
+              <button class="btn-copy" onclick="copySnippet('cmd-cmd', this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span>Copy</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -702,53 +727,14 @@
   </div>
 
   <script>
-    const platforms = {
-      ps: {
-        symbol: "PS >",
-        cmd: "irm https://apipatch.fix2ship.dev/install.ps1 | iex",
-        tag: "Standalone Binary · x64 / arm64",
-        note: "Installs binary to <code>$HOME\\.apipatch\\bin</code> and registers user environment <code>PATH</code> automatically."
-      },
-      bash: {
-        symbol: "$",
-        cmd: "curl -fsSL https://apipatch.fix2ship.dev/install.sh | bash",
-        tag: "macOS · Linux · WSL (x64 / arm64)",
-        note: "Installs binary to <code>~/.apipatch/bin</code> and adds it to <code>.bashrc</code> / <code>.zshrc</code>."
-      },
-      cmd: {
-        symbol: "C:\\>",
-        cmd: "curl -fsSL https://apipatch.fix2ship.dev/install.cmd -o install.cmd && install.cmd && del install.cmd",
-        tag: "Windows Command Prompt",
-        note: "Downloads package, extracts with tar, and sets user <code>PATH</code> via <code>setx</code>."
-      }
-    };
-
-    function selectPlatform(key) {
-      document.querySelectorAll('.t-tab-btn').forEach(btn => btn.classList.remove('active'));
-      const activeBtn = document.getElementById('tab-' + key);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const data = platforms[key];
-      if (!data) return;
-
-      document.getElementById('prompt-symbol').innerText = data.symbol;
-      document.getElementById('install-cmd').innerText = data.cmd;
-      document.getElementById('platform-tag').innerText = data.tag;
-      document.getElementById('terminal-note').innerHTML = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-          <polyline points="22 4 12 14.01 9 11.01"></polyline>
-        </svg>
-        <span>${data.note}</span>
-      `;
-    }
-
-    function copyInstallCmd() {
-      const code = document.getElementById('install-cmd').innerText;
+  <script>
+    function copySnippet(elementId, btn) {
+      const code = document.getElementById(elementId).innerText;
       navigator.clipboard.writeText(code).then(() => {
-        const label = document.getElementById('copy-label');
-        label.innerText = 'Copied!';
-        setTimeout(() => { label.innerText = 'Copy'; }, 2000);
+        const textSpan = btn.querySelector('span');
+        const origText = textSpan.innerText;
+        textSpan.innerText = 'Copied!';
+        setTimeout(() => { textSpan.innerText = origText; }, 2000);
       });
     }
   </script>
