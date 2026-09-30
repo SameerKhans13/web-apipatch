@@ -3,7 +3,7 @@
 
 $ErrorActionPreference = 'Stop'
 
-$Repo = "fix2ship/apipatch"
+$Repo = "SameerKhans13/web-apipatch"
 $InstallDir = Join-Path $HOME ".apipatch\bin"
 $ExePath = Join-Path $InstallDir "apipatch.exe"
 
