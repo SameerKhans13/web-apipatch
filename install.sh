@@ -54,7 +54,28 @@ mkdir -p "${INSTALL_DIR}"
 echo "Downloading apipatch CLI (${TARGET_OS}-${TARGET_ARCH})..."
 curl -fsSL "${DOWNLOAD_URL}" -o "${TMP_DIR}/${ZIP_NAME}"
 
-unzip -q -o "${TMP_DIR}/${ZIP_NAME}" -d "${TMP_DIR}"
+extract_zip() {
+  local zip_file="$1"
+  local dest="$2"
+
+  if command -v unzip >/dev/null 2>&1; then
+    unzip -q -o "${zip_file}" -d "${dest}"
+  elif command -v tar >/dev/null 2>&1 && tar -tf "${zip_file}" >/dev/null 2>&1; then
+    tar -xf "${zip_file}" -C "${dest}"
+  elif command -v python3 >/dev/null 2>&1; then
+    python3 -c "import zipfile; zipfile.ZipFile('${zip_file}').extractall('${dest}')"
+  elif command -v python >/dev/null 2>&1; then
+    python -c "import zipfile; zipfile.ZipFile('${zip_file}').extractall('${dest}')"
+  elif command -v busybox >/dev/null 2>&1; then
+    busybox unzip -q "${zip_file}" -d "${dest}"
+  else
+    echo "Error: Neither 'unzip', 'tar', nor 'python3' is available to extract the package." >&2
+    echo "Please install 'unzip' using: sudo apt update && sudo apt install -y unzip" >&2
+    exit 1
+  fi
+}
+
+extract_zip "${TMP_DIR}/${ZIP_NAME}" "${TMP_DIR}"
 find "${TMP_DIR}" -type f -name "apipatch*" ! -name "*.zip" -exec mv -f {} "${EXE_PATH}" \;
 chmod +x "${EXE_PATH}"
 
