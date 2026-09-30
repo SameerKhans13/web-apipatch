@@ -26,7 +26,7 @@ if (-not (Test-Path $InstallDir)) {
 # 3. Download compressed zip archive (Fast & lightweight)
 $DownloadUrl = "https://github.com/$Repo/releases/download/v1.0.0/apipatch-windows-$Arch.zip"
 
-Write-Host "Downloading apipatch CLI ($Arch) package..." -ForegroundColor Gray
+Write-Host "Downloading apipatch CLI package..." -ForegroundColor Gray
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Invoke-WebRequest -Uri $DownloadUrl -OutFile $ZipPath -UseBasicParsing
 
@@ -51,5 +51,6 @@ if ($UserPath -notlike "*$InstallDir*") {
     $env:Path = "$env:Path;$InstallDir"
 }
 
-Write-Host "`n✓ apipatch successfully installed to $ExePath!" -ForegroundColor Green
+Write-Host ""
+Write-Host "Successfully installed apipatch to: $ExePath" -ForegroundColor Green
 Write-Host "Run 'apipatch --help' to get started." -ForegroundColor Cyan
