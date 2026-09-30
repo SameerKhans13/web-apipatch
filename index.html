@@ -233,109 +233,113 @@
 
     /* Terminal Window */
     .terminal-card {
-      max-width: 780px;
-      margin: 0 auto 4.5rem;
+      max-width: 840px;
+      margin: 0 auto 5rem;
       background: var(--bg-code);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 24px 64px -12px rgba(0, 0, 0, 0.8), 0 0 35px rgba(56, 189, 248, 0.06);
+      box-shadow: 0 28px 70px -15px rgba(0, 0, 0, 0.85), 0 0 45px rgba(56, 189, 248, 0.08);
       text-align: left;
     }
 
     .terminal-header {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.025);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.85rem 1.25rem;
+      padding: 1.1rem 1.6rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .window-dots {
+    .terminal-left {
       display: flex;
-      gap: 7px;
+      align-items: center;
+      gap: 0.75rem;
     }
 
-    .w-dot {
-      width: 11px;
-      height: 11px;
-      border-radius: 50%;
+    .terminal-icon {
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
     }
-    .w-dot.red { background: #ff5f56; }
-    .w-dot.yellow { background: #ffbd2e; }
-    .w-dot.green { background: #27c93f; }
 
-    .terminal-file {
+    .terminal-title {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.75rem;
-      color: #94a3b8;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      letter-spacing: -0.01em;
     }
 
     .terminal-tag {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.25);
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
     }
 
     .terminal-content {
-      padding: 1.5rem;
+      padding: 1.75rem 1.6rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem;
+      font-size: 1.05rem;
     }
 
     .terminal-command-bar {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      padding: 1.1rem 1.3rem;
-      border-radius: 10px;
+      gap: 1.25rem;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 1.35rem 1.6rem;
+      border-radius: 12px;
     }
 
     .code-line {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
       overflow-x: auto;
     }
 
     .prompt-symbol {
-      color: #64748b;
+      color: #475569;
       user-select: none;
+      font-weight: 700;
     }
 
     .code-target {
       color: #38bdf8;
       user-select: all;
+      font-weight: 500;
+      letter-spacing: -0.01em;
     }
 
     .btn-copy {
       background: rgba(56, 189, 248, 0.12);
       border: 1px solid rgba(56, 189, 248, 0.35);
       color: #38bdf8;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+      padding: 0.65rem 1.25rem;
+      border-radius: 9px;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
+      gap: 0.5rem;
       transition: all 0.2s;
       white-space: nowrap;
     }
 
     .btn-copy:hover {
       background: rgba(56, 189, 248, 0.22);
-      box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
     }
 
     .terminal-instructions {
@@ -556,13 +560,16 @@
         <!-- PowerShell Terminal Box -->
         <div class="terminal-card" id="quickstart">
           <div class="terminal-header">
-            <div class="window-dots">
-              <span class="w-dot red"></span>
-              <span class="w-dot yellow"></span>
-              <span class="w-dot green"></span>
+            <div class="terminal-left">
+              <span class="terminal-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 17 10 11 4 5"></polyline>
+                  <line x1="12" y1="19" x2="20" y2="19"></line>
+                </svg>
+              </span>
+              <span class="terminal-title">Windows PowerShell</span>
             </div>
-            <div class="terminal-file">Windows PowerShell</div>
-            <span class="terminal-tag">x64 / arm64</span>
+            <span class="terminal-tag">Standalone Binary · x64 / arm64</span>
           </div>
 
           <div class="terminal-content">
