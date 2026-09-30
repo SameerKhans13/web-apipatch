@@ -242,10 +242,42 @@
     .terminal-header {
       background: rgba(255, 255, 255, 0.02);
       border-bottom: 1px solid var(--border);
-      padding: 1.1rem 1.6rem;
+      padding: 0.85rem 1.6rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    .terminal-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .t-tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 0.4rem 0.85rem;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      transition: all 0.2s;
+    }
+
+    .t-tab-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .t-tab-btn.active {
+      color: #ffffff;
+      background: rgba(37, 99, 235, 0.2);
+      border-color: rgba(59, 130, 246, 0.4);
     }
 
     .terminal-left {
@@ -554,25 +586,21 @@
           ApiPatch reads OpenAPI 3.x and GraphQL SDL contracts, diffs semantic breaking changes, and rewrites consumer call-sites and MSW mocks before changes hit production.
         </p>
 
-        <!-- PowerShell Terminal Box -->
+        <!-- Multi-Platform Terminal Box -->
         <div class="terminal-card" id="quickstart">
           <div class="terminal-header">
-            <div class="terminal-left">
-              <span class="terminal-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="4 17 10 11 4 5"></polyline>
-                  <line x1="12" y1="19" x2="20" y2="19"></line>
-                </svg>
-              </span>
-              <span class="terminal-title">Windows PowerShell</span>
+            <div class="terminal-tabs">
+              <button class="t-tab-btn active" id="tab-ps" onclick="selectPlatform('ps')">Windows (PowerShell)</button>
+              <button class="t-tab-btn" id="tab-bash" onclick="selectPlatform('bash')">macOS, Linux, WSL</button>
+              <button class="t-tab-btn" id="tab-cmd" onclick="selectPlatform('cmd')">Windows (CMD)</button>
             </div>
-            <span class="terminal-tag">Standalone Binary · x64 / arm64</span>
+            <span class="terminal-tag" id="platform-tag">Standalone Binary · x64 / arm64</span>
           </div>
 
           <div class="terminal-content">
             <div class="terminal-command-bar">
               <div class="code-line">
-                <span class="prompt-symbol">PS &gt;</span>
+                <span class="prompt-symbol" id="prompt-symbol">PS &gt;</span>
                 <code class="code-target" id="install-cmd">irm https://apipatch.fix2ship.dev/install.ps1 | iex</code>
               </div>
               <button class="btn-copy" onclick="copyInstallCmd()">
@@ -583,12 +611,12 @@
                 <span id="copy-label">Copy</span>
               </button>
             </div>
-            <div class="terminal-instructions">
+            <div class="terminal-instructions" id="terminal-note">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
               </svg>
-              Installs binary to <code>$HOME\.apipatch\bin</code> and registers user environment <code>PATH</code> automatically.
+              <span>Installs binary to <code>$HOME\.apipatch\bin</code> and registers user environment <code>PATH</code> automatically.</span>
             </div>
           </div>
         </div>
@@ -674,6 +702,47 @@
   </div>
 
   <script>
+    const platforms = {
+      ps: {
+        symbol: "PS >",
+        cmd: "irm https://apipatch.fix2ship.dev/install.ps1 | iex",
+        tag: "Standalone Binary · x64 / arm64",
+        note: "Installs binary to <code>$HOME\\.apipatch\\bin</code> and registers user environment <code>PATH</code> automatically."
+      },
+      bash: {
+        symbol: "$",
+        cmd: "curl -fsSL https://apipatch.fix2ship.dev/install.sh | bash",
+        tag: "macOS · Linux · WSL (x64 / arm64)",
+        note: "Installs binary to <code>~/.apipatch/bin</code> and adds it to <code>.bashrc</code> / <code>.zshrc</code>."
+      },
+      cmd: {
+        symbol: "C:\\>",
+        cmd: "curl -fsSL https://apipatch.fix2ship.dev/install.cmd -o install.cmd && install.cmd && del install.cmd",
+        tag: "Windows Command Prompt",
+        note: "Downloads package, extracts with tar, and sets user <code>PATH</code> via <code>setx</code>."
+      }
+    };
+
+    function selectPlatform(key) {
+      document.querySelectorAll('.t-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('tab-' + key);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const data = platforms[key];
+      if (!data) return;
+
+      document.getElementById('prompt-symbol').innerText = data.symbol;
+      document.getElementById('install-cmd').innerText = data.cmd;
+      document.getElementById('platform-tag').innerText = data.tag;
+      document.getElementById('terminal-note').innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+          <polyline points="22 4 12 14.01 9 11.01"></polyline>
+        </svg>
+        <span>${data.note}</span>
+      `;
+    }
+
     function copyInstallCmd() {
       const code = document.getElementById('install-cmd').innerText;
       navigator.clipboard.writeText(code).then(() => {
