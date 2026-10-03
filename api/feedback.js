@@ -16,7 +16,15 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const body = req.body || {};
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch {
+        // use raw body
+      }
+    }
+    body = body || {};
 
     if (!body.category || typeof body.category !== "string") {
       return res.status(400).json({ error: "Missing or invalid category" });
@@ -76,6 +84,6 @@ module.exports = async (req, res) => {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.error("Error processing feedback:", message);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error", message });
   }
 };
