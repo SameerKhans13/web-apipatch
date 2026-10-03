@@ -1,0 +1,5 @@
+node_modules
+.apipatch-cache
+.env
+.env.local
+.vercel
