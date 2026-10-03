@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Supabase insert error:", response.status, errorText);
-        return res.status(502).json({ error: "Failed to persist feedback upstream" });
+        return res.status(502).json({ error: "Failed to persist feedback upstream", detail: errorText, status: response.status });
       }
 
       const data = await response.json();
