@@ -45,7 +45,7 @@ case "${ARCH}" in
 esac
 
 ZIP_NAME="apipatch-${TARGET_OS}-${TARGET_ARCH}.zip"
-DOWNLOAD_URL="https://github.com/${REPO}/releases/download/v1.0.0/${ZIP_NAME}"
+DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/${ZIP_NAME}"
 
 # 3. Create install directory
 mkdir -p "${INSTALL_DIR}"

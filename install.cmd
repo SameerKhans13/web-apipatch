@@ -13,7 +13,7 @@ if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
 
 :: 2. Download compressed zip package
 echo Downloading apipatch CLI package...
-curl -fsSL "https://github.com/%REPO%/releases/download/v1.0.0/apipatch-windows-x64.zip" -o "%ZIP_PATH%"
+curl -fsSL "https://github.com/%REPO%/releases/latest/download/apipatch-windows-x64.zip" -o "%ZIP_PATH%"
 if %ERRORLEVEL% neq 0 (
     echo Error: Failed to download package.
     exit /b 1
