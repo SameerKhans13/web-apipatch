@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+  <title>Documentation · ApiPatch CLI | Autonomous Dependency & API Remediation</title>
+  <meta name="description" content="Comprehensive documentation for ApiPatch CLI: Commands, package dependency management, API contracts, adding vendors, AST remediation engine, and CI/CD automation." />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #090a0d;
+      --bg-surface: #0e1017;
+      --bg-card: #13161f;
+      --bg-card-hover: #181c27;
+      --bg-code: #0b0c10;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(59, 130, 246, 0.4);
+      --text: #ffffff;
+      --text-muted: #9ca3af;
+      --text-sub: #6b7280;
+      --blue: #2563eb;
+      --blue-accent: #3b82f6;
+      --blue-glow: rgba(37, 99, 235, 0.18);
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      top: -250px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.14) 0%, rgba(15, 23, 42, 0.05) 55%, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Floating Pill Header */
+    .nav-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1rem 1.5rem;
+      pointer-events: none;
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      pointer-events: auto;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: rgba(14, 16, 23, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.8);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: -0.02em;
+    }
+    .brand-title .fix { color: #ffffff; }
+    .brand-title .ship { color: var(--blue-accent); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.35rem 0.8rem;
+      border-radius: 9999px;
+      transition: all 0.2s;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.35rem 0.85rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #ffffff;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      border-color: var(--blue-accent);
+      background: rgba(37, 99, 235, 0.25);
+    }
+
+    /* Main Layout */
+    .docs-layout {
+      max-width: 1300px;
+      width: 100%;
+      margin: 5.5rem auto 3rem;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2.5rem;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      position: sticky;
+      top: 5.5rem;
+      height: calc(100vh - 7rem);
+      overflow-y: auto;
+      padding-right: 0.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
+
+    .search-box {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem 0.5rem 2rem;
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--blue-accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.65rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-sub);
+      pointer-events: none;
+    }
+
+    .sidebar-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .sidebar-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      padding-left: 0.5rem;
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-link {
+      display: block;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .sidebar-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.05);
+      padding-left: 0.8rem;
+    }
+
+    .sidebar-link.active {
+      color: var(--blue-accent);
+      background: rgba(37, 99, 235, 0.12);
+      font-weight: 600;
+      border-left: 2px solid var(--blue-accent);
+      padding-left: 0.7rem;
+    }
+
+    /* Content Area */
+    .content {
+      min-width: 0;
+      max-width: 880px;
+    }
+
+    .doc-section {
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 3.5rem;
+    }
+
+    .doc-section:last-child {
+      border-bottom: none;
+    }
+
+    .doc-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .doc-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--blue-accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+      color: #ffffff;
+    }
+
+    h2 {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 2rem 0 0.85rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin: 1.5rem 0 0.6rem;
+      color: #e5e7eb;
+    }
+
+    p {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 0.98rem;
+      line-height: 1.7;
+    }
+
+    p strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    ul, ol {
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      padding-left: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+      line-height: 1.6;
+    }
+
+    /* Cards & Grids */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0 1.75rem;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem;
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(59, 130, 246, 0.35);
+      background: var(--bg-card);
+      transform: translateY(-2px);
+    }
+
+    .card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Code Blocks */
+    .code-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 1rem 0 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .code-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-sub);
+    }
+
+    .code-lang {
+      color: var(--blue-accent);
+      font-weight: 600;
+    }
+
+    .btn-copy-code {
+      background: transparent;
+      border: none;
+      color: var(--text-sub);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn-copy-code:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    pre {
+      padding: 1.1rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: #d1d5db;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    p code, li code, td code {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.15rem 0.35rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: #93c5fd;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-surface);
+      color: #ffffff;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Callouts */
+    .callout {
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-left: 4px solid var(--blue-accent);
+      background: rgba(37, 99, 235, 0.07);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.35rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.92rem;
+    }
+
+    .callout.warning {
+      border-left-color: var(--yellow);
+      background: rgba(245, 158, 11, 0.08);
+    }
+
+    .callout.success {
+      border-left-color: var(--green);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-surface);
+      padding: 2.5rem 1.5rem;
+      margin-top: auto;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    @media (max-width: 900px) {
+      .docs-layout {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="ambient-glow"></div>
+
+  <!-- Floating Navigation -->
+  <div class="nav-wrapper">
+    <nav>
+      <a href="index.html" class="brand">
+        <div class="logo-badge">
+          <svg viewBox="0 0 64 64" width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M26 15L11 30L26 45L34 30H53" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M41 18L53 30L41 42" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <span class="brand-title"><span class="fix">apipatch</span><span class="ship">.docs</span></span>
+      </a>
+
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Overview</a>
+        <a href="#quickstart" class="nav-link">Install</a>
+        <a href="#commands" class="nav-link">Commands</a>
+        <a href="#apis" class="nav-link">Vendors & APIs</a>
+        <a href="https://github.com/fix2ship/apipatch" target="_blank" rel="noopener" class="nav-cta">
+          <span>GitHub</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17L17 7M17 7H7M17 7V17"/>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="docs-layout">
+    <!-- Left Sticky Sidebar -->
+    <aside class="sidebar">
+      <div class="search-box">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="docSearch" class="search-input" placeholder="Search documentation..." onkeyup="filterDocs()" />
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Getting Started</div>
+        <ul class="sidebar-menu">
+          <li><a href="#quickstart" class="sidebar-link active">Installation & Quickstart</a></li>
+          <li><a href="#architecture" class="sidebar-link">Hexagonal Architecture</a></li>
+          <li><a href="#workflow" class="sidebar-link">The 3-Step Lifecycle</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">CLI Commands</div>
+        <ul class="sidebar-menu">
+          <li><a href="#cmd-init" class="sidebar-link">apipatch init</a></li>
+          <li><a href="#cmd-scan" class="sidebar-link">apipatch scan</a></li>
+          <li><a href="#cmd-plan" class="sidebar-link">apipatch plan</a></li>
+          <li><a href="#cmd-apply" class="sidebar-link">apipatch apply</a></li>
+          <li><a href="#cmd-contract" class="sidebar-link">apipatch contract</a></li>
+          <li><a href="#cmd-update" class="sidebar-link">apipatch update</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Dependencies & Security</div>
+        <ul class="sidebar-menu">
+          <li><a href="#packages" class="sidebar-link">Package Upgrades (--packages)</a></li>
+          <li><a href="#ecosystems" class="sidebar-link">Multi-Ecosystem Engines</a></li>
+          <li><a href="#security" class="sidebar-link">OSV Vulnerability Audit</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">APIs & Vendors</div>
+        <ul class="sidebar-menu">
+          <li><a href="#manifest" class="sidebar-link">apipatch.manifest.json</a></li>
+          <li><a href="#adding-vendors" class="sidebar-link">Adding Vendor APIs</a></li>
+          <li><a href="#baselines" class="sidebar-link">Contract Baselines (Lock)</a></li>
+          <li><a href="#graphql" class="sidebar-link">OpenAPI vs GraphQL</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">AST Remediation</div>
+        <ul class="sidebar-menu">
+          <li><a href="#ast-engine" class="sidebar-link">Data-Flow Analysis</a></li>
+          <li><a href="#multi-hop" class="sidebar-link">N-Hop Transitive Wrappers</a></li>
+          <li><a href="#endpoint-wrappers" class="sidebar-link">Fixed-URL Endpoint Wrappers</a></li>
+          <li><a href="#class-methods" class="sidebar-link">Class & Object Methods</a></li>
+          <li><a href="#msw-mocks" class="sidebar-link">MSW Handler Synchronization</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">CI / CD & Production</div>
+        <ul class="sidebar-menu">
+          <li><a href="#pr-mode" class="sidebar-link">PR-First Mode (apply --pr)</a></li>
+          <li><a href="#exit-codes" class="sidebar-link">CI Exit Codes (ADR 0015)</a></li>
+          <li><a href="#sarif" class="sidebar-link">SARIF 2.1.0 Reporting</a></li>
+          <li><a href="#airgapped" class="sidebar-link">Air-Gapped & Offline Runs</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Documentation Content -->
+    <main class="content">
+      
+      <!-- Section 1: Quickstart & Installation -->
+      <section class="doc-section" id="quickstart">
+        <div class="doc-header">
+          <span class="doc-tag">Getting Started</span>
+          <h1>Installation & Quickstart</h1>
+          <p>ApiPatch is distributed as a self-contained, precompiled native executable with zero runtime dependencies. No Node.js, Python, or runtime prerequisites are required.</p>
+        </div>
+
+        <h2>Installation Methods</h2>
+
+        <h3>1. macOS & Linux (Bash / Zsh)</h3>
+        <p>Supports Apple Silicon (M1/M2/M3/M4), Intel macOS, and Linux x64/arm64:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">BASH</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-install-sh', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-install-sh">curl -fsSL https://apipatch.fix2ship.dev/install.sh | bash</code></pre>
+        </div>
+
+        <h3>2. Windows PowerShell</h3>
+        <p>Installs directly to <code>~/.apipatch/bin/apipatch.exe</code> and registers into User PATH:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">POWERSHELL</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-install-ps1', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-install-ps1">irm https://apipatch.fix2ship.dev/install.ps1 | iex</code></pre>
+        </div>
+
+        <h3>3. Windows Command Prompt (CMD)</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">CMD</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-install-cmd', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-install-cmd">curl -fsSL https://apipatch.fix2ship.dev/install.cmd -o install.cmd && install.cmd && del install.cmd</code></pre>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+            Verify Installation
+          </div>
+          <p>Run <code>apipatch --version</code> in your terminal. You should see <code>apipatch v1.2.1</code>.</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Architecture & Workflow -->
+      <section class="doc-section" id="architecture">
+        <div class="doc-header">
+          <span class="doc-tag">Core Concepts</span>
+          <h1>Hexagonal Architecture & The 3-Step Lifecycle</h1>
+          <p>ApiPatch separates pure business domain logic (contract diffing, AST symbol tracing, policy evaluation) from platform-specific adapters (filesystem, Git, network, GitHub API).</p>
+        </div>
+
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-title">1. Scan & Observe</div>
+            <div class="card-desc">Non-mutating inspection. Analyzes package lockfiles, resolves OSV CVE vulnerabilities, and compares API schemas against baseline snapshots.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">2. Plan & Synthesize</div>
+            <div class="card-desc">Constructs an atomic transaction journal. Resolves non-breaking package ranges and builds AST codemod rewriters using the TypeScript Compiler API.</div>
+          </div>
+          <div class="card">
+            <div class="card-title">3. Apply & Verify</div>
+            <div class="card-desc">Applies modifications atomically. Enforces project typecheck (<code>tsc --noEmit</code>) and test gates; rolls back byte-for-byte if any check fails.</div>
+          </div>
+        </div>
+
+        <h2 id="workflow">Safety Invariants</h2>
+        <ul>
+          <li><strong>Zero Unverified Mutation:</strong> ApiPatch never modifies files unless <code>--yes</code> is provided or run in <code>--pr</code> mode.</li>
+          <li><strong>Atomic Rollback:</strong> If a rewritten file introduces a TypeScript error or fails a test gate, the entire transaction is rolled back byte-for-byte and flagged for <strong>Manual Review</strong>.</li>
+          <li><strong>No Guess Application:</strong> When endpoints or fields map via fuzzy similarity rather than explicit annotations (e.g. <code>x-replaced-by</code>), ApiPatch marks the change as a <code>guess</code> and leaves it for developer confirmation.</li>
+        </ul>
+      </section>
+
+      <!-- Section 3: CLI Commands -->
+      <section class="doc-section" id="commands">
+        <div class="doc-header">
+          <span class="doc-tag">Reference</span>
+          <h1>CLI Commands Reference</h1>
+          <p>Full catalog of primary commands, flags, and usage patterns.</p>
+        </div>
+
+        <h2 id="cmd-init">1. apipatch init</h2>
+        <p>Scaffolds <code>apipatch.manifest.json</code> in an existing repository and configures declared upstream APIs.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-init-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-init-ex"># Initialize and declare an OpenAPI endpoint
+apipatch init --declare-api backend=./schemas/openapi.yaml:openapi
+
+# Initialize with a remote vendor contract
+apipatch init --declare-api stripe=https://api.stripe.com/openapi.json:openapi</code></pre>
+        </div>
+
+        <h2 id="cmd-scan">2. apipatch scan</h2>
+        <p>Performs a read-only audit across package dependencies, API contracts, and security vulnerabilities without altering any files.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-scan-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-scan-ex"># Full scan across all families
+apipatch scan --all
+
+# Scan only security vulnerabilities against OSV
+apipatch scan --security
+
+# Output machine-readable JSON for CI pipelines
+apipatch scan --format json --report-file report.json</code></pre>
+        </div>
+
+        <h2 id="cmd-plan">3. apipatch plan</h2>
+        <p>Produces an inspectable diff and migration plan showing exactly what package versions will be updated and what AST code edits will be performed.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-plan-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-plan-ex">apipatch plan --packages --strategy minor
+apipatch plan --apis --format markdown</code></pre>
+        </div>
+
+        <h2 id="cmd-apply">4. apipatch apply</h2>
+        <p>Applies approved package bumps, vulnerability patches, or API codemod rewrites. Requires <code>--yes</code> (or <code>--pr</code>).</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-apply-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-apply-ex"># Safe package dependency updates with automatic verification
+apipatch apply --packages --yes --verify
+
+# Apply breaking API contract rewrites
+apipatch apply --apis --yes
+
+# PR-First mode: creates branch, verifies in worktree, and opens GitHub PR
+apipatch apply --all --pr --yes --pr-title "chore(deps): autonomous dependency & API updates"</code></pre>
+        </div>
+
+        <h2 id="cmd-contract">5. apipatch contract</h2>
+        <p>Direct contract-to-contract diffing and AST remediation between two explicit schema files.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-contract-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-contract-ex">apipatch contract \
+  --contract-old schemas/v1-openapi.json \
+  --contract-new schemas/v2-openapi.json \
+  --format json \
+  --dry-run</code></pre>
+        </div>
+
+        <h2 id="cmd-update">6. apipatch update</h2>
+        <p>Self-updater that queries the signed release server, checks minisign signatures, and upgrades the binary in-place.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">COMMAND</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-update-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-update-ex"># Check for updates
+apipatch update --dry-run
+
+# Install latest release
+apipatch update --yes</code></pre>
+        </div>
+      </section>
+
+      <!-- Section 4: Dependencies & Security -->
+      <section class="doc-section" id="packages">
+        <div class="doc-header">
+          <span class="doc-tag">Dependencies</span>
+          <h1>Package Dependency & Security Management</h1>
+          <p>ApiPatch supports all major JavaScript/TypeScript package managers with native lockfile AST parsing and transitive vulnerability deduplication.</p>
+        </div>
+
+        <h2 id="ecosystems">Supported Ecosystems</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Ecosystem</th>
+                <th>Manifest</th>
+                <th>Lockfile</th>
+                <th>Transitive Resolution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>npm</strong></td>
+                <td><code>package.json</code></td>
+                <td><code>package-lock.json</code> (v1, v2, v3)</td>
+                <td>Full AST parse + deduplication</td>
+              </tr>
+              <tr>
+                <td><strong>pnpm</strong></td>
+                <td><code>package.json</code></td>
+                <td><code>pnpm-lock.yaml</code> (v5, v6, v9)</td>
+                <td>Inline snapshot parsing</td>
+              </tr>
+              <tr>
+                <td><strong>yarn</strong></td>
+                <td><code>package.json</code></td>
+                <td><code>yarn.lock</code> (v1 Classic, Berry)</td>
+                <td>Resolutions & scope tracking</td>
+              </tr>
+              <tr>
+                <td><strong>bun</strong></td>
+                <td><code>package.json</code></td>
+                <td><code>bun.lock</code>, <code>bun.lockb</code></td>
+                <td>Native text lockfile format</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="security">Security Vulnerability Scanning</h2>
+        <p>ApiPatch integrates directly with the <strong>Open Source Vulnerabilities (OSV)</strong> database and GHSA advisories. It inspects every installed package version across both direct dependencies and deep transitive sub-dependencies.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">BASH</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-sec-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-sec-ex"># Scan lockfile for vulnerabilities
+apipatch scan --security
+
+# Automatically remediate vulnerabilities by calculating the minimum non-breaking target version
+apipatch apply --security --yes</code></pre>
+        </div>
+      </section>
+
+      <!-- Section 5: APIs & Vendors -->
+      <section class="doc-section" id="apis">
+        <div class="doc-header">
+          <span class="doc-tag">Contracts & Vendors</span>
+          <h1>Adding Vendors & Managing API Contracts</h1>
+          <p>Configure upstream third-party APIs (Stripe, GitHub, Discord, Twilio, OpenAI, internal microservices) and track contract baselines across breaking changes.</p>
+        </div>
+
+        <h2 id="manifest">apipatch.manifest.json Structure</h2>
+        <p>The manifest declares upstream API dependencies, contract types, authentication headers, and explicit route migration mappings:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">JSON</span>
+            <button class="btn-copy-code" onclick="copySnippet('json-manifest-ex', this)">Copy</button>
+          </div>
+          <pre><code id="json-manifest-ex">{
+  "$schema": "https://apipatch.dev/schemas/manifest.v1.json",
+  "apis": [
+    {
+      "name": "stripe",
+      "type": "openapi",
+      "source": "https://raw.githubusercontent.com/stripe/openapi/master/openapi/spec3.json",
+      "headers": {
+        "Authorization": "Bearer ${STRIPE_API_KEY}"
+      },
+      "mappings": {
+        "POST /charges": "POST /payment_intents"
+      }
+    },
+    {
+      "name": "github",
+      "type": "openapi",
+      "source": "https://raw.githubusercontent.com/github/rest-api-description/main/descriptions/api.github.com/api.github.com.json"
+    },
+    {
+      "name": "internal-billing",
+      "type": "openapi",
+      "source": "./schemas/billing-v2.yaml"
+    },
+    {
+      "name": "catalog",
+      "type": "graphql",
+      "source": "./schemas/schema.graphql"
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <h2 id="adding-vendors">How to Add a New Vendor API</h2>
+        <ol>
+          <li>
+            <strong>Declare via CLI:</strong>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">COMMAND</span></div>
+              <pre><code>apipatch init --declare-api twilio=https://raw.githubusercontent.com/twilio/twilio-oai/main/spec/json/twilio_api_v2010.json:openapi</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>Establish the Contract Baseline:</strong>
+            <p>Save the current contract snapshot into <code>apipatch.lock</code>. This establishes the baseline for all future diffs:</p>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">COMMAND</span></div>
+              <pre><code>apipatch apply --apis --baseline --yes</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>Detect Upstream Breaking Changes:</strong>
+            <p>When the vendor publishes a new schema version, run scan to detect diffs:</p>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">COMMAND</span></div>
+              <pre><code>apipatch scan --apis</code></pre>
+            </div>
+          </li>
+          <li>
+            <strong>Remediate Call Sites:</strong>
+            <div class="code-block">
+              <div class="code-header"><span class="code-lang">COMMAND</span></div>
+              <pre><code>apipatch apply --apis --yes</code></pre>
+            </div>
+          </li>
+        </ol>
+
+        <h2 id="graphql">OpenAPI 3.x vs GraphQL SDL Support</h2>
+        <ul>
+          <li><strong>OpenAPI 3.0 & 3.1:</strong> Full support for paths, operationIds, parameters (path, query, header), requestBody schemas, response schemas, status codes, and server base paths.</li>
+          <li><strong>GraphQL SDL & Introspection:</strong> Canonical AST normalization: directives, inputs, mutations, and field renames share one unified cryptographic fingerprint.</li>
+        </ul>
+      </section>
+
+      <!-- Section 6: AST Remediation Engine -->
+      <section class="doc-section" id="ast-engine">
+        <div class="doc-header">
+          <span class="doc-tag">AST Codemods</span>
+          <h1>AST Data-Flow Remediation Engine</h1>
+          <p>ApiPatch performs compiler-level Abstract Syntax Tree (AST) rewrites using TypeScript Compiler APIs. Code is transformed only where data flow proves the call site connects to the modified API.</p>
+        </div>
+
+        <h2 id="multi-hop">1. N-Hop Transitive Wrapper Resolution</h2>
+        <p>In enterprise architectures, applications rarely invoke <code>fetch()</code> directly. ApiPatch resolves up to <strong>5 transitive hops</strong> of wrapper functions with cycle detection:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">TYPESCRIPT (TRANSITIVE WRAPPERS)</span></div>
+          <pre><code>// Level 1: Low-level transport
+const inner = (url: string, body: unknown) => fetch(url, { method: "POST", body: JSON.stringify(body) });
+
+// Level 2: Middleware / header injector
+const middle = (url: string, body: unknown) => inner(url, body);
+
+// Level 3: Service-layer wrapper
+const outer = (url: string, body: unknown) => middle(url, body);
+
+// Business Logic Call-Site:
+// Before migration:
+outer("/users", { user_name: "alice" });
+
+// Automatically rewritten by ApiPatch:
+outer("/users", { userName: "alice" });</code></pre>
+        </div>
+
+        <h2 id="endpoint-wrappers">2. Fixed-URL Endpoint Wrappers</h2>
+        <p>Helpers that encapsulate a specific URL path are analyzed by binding the target route template to caller parameters:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">TYPESCRIPT (ENDPOINT WRAPPER)</span></div>
+          <pre><code>const postJson = (url: string, payload: unknown) => fetch(url, { method: "POST", body: JSON.stringify(payload) });
+const createUser = (payload: unknown) => postJson("/users", payload);
+
+// Before:
+createUser({ user_name: "bob" });
+
+// After:
+createUser({ userName: "bob" });</code></pre>
+        </div>
+
+        <h2 id="class-methods">3. Class & Object Methods</h2>
+        <p>Class instances (<code>this.post()</code>, <code>apiClient.createUser()</code>) are inspected and resolved as local wrappers before defaulting to generic SDK heuristics.</p>
+
+        <h2 id="msw-mocks">4. MSW Handler Synchronization</h2>
+        <p>Mock Service Worker (MSW) test handlers are updated alongside consumer code. Dynamic route parameters (<code>:id</code> ↔ <code>{id}</code>), response bodies, and HTTP status codes automatically follow the updated schema.</p>
+      </section>
+
+      <!-- Section 7: CI/CD & Production -->
+      <section class="doc-section" id="pr-mode">
+        <div class="doc-header">
+          <span class="doc-tag">CI/CD & DevOps</span>
+          <h1>Enterprise CI/CD & PR Automation</h1>
+          <p>Automate pull requests, prevent false-positive pipeline failures, and export SARIF findings to GitHub Security.</p>
+        </div>
+
+        <h2>PR-First Mode (apply --pr)</h2>
+        <p>In CI or local developer workflows, <code>apply --pr</code> executes mutations inside an isolated Git worktree, runs the verification gates, commits changes, and opens a Pull Request using <code>gh</code> or the GitHub API:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">BASH</span>
+            <button class="btn-copy-code" onclick="copySnippet('cmd-pr-ex', this)">Copy</button>
+          </div>
+          <pre><code id="cmd-pr-ex">apipatch apply --all --pr --yes \
+  --pr-branch apipatch/weekly-dependency-sync \
+  --pr-title "chore(deps): autonomous dependency & API sync"</code></pre>
+        </div>
+
+        <h2 id="exit-codes">CI Exit Codes (ADR 0015)</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Exit Code</th>
+                <th>Status</th>
+                <th>Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>0</code></td>
+                <td><strong>SUCCESS</strong></td>
+                <td>Operation completed cleanly. No findings at or above <code>--fail-on</code> remain.</td>
+              </tr>
+              <tr>
+                <td><code>1</code></td>
+                <td><strong>ERROR</strong></td>
+                <td>Tool or usage error, network fetch timeout, or verification gate failure.</td>
+              </tr>
+              <tr>
+                <td><code>2</code></td>
+                <td><strong>FINDINGS</strong></td>
+                <td>Findings detected at or above <code>--fail-on</code> threshold (e.g. breaking API diffs or CVEs).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="sarif">GitHub Code Scanning (SARIF 2.1.0)</h2>
+        <p>Generate SARIF output to populate GitHub's Security tab with precise file locations, line numbers, and rule IDs:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-lang">GITHUB ACTIONS</span>
+            <button class="btn-copy-code" onclick="copySnippet('yaml-gh-actions', this)">Copy</button>
+          </div>
+          <pre><code id="yaml-gh-actions">- name: Run ApiPatch Security & Contract Audit
+  run: |
+    apipatch scan --all --format sarif --report-file apipatch-results.sarif --fail-on high
+
+- name: Upload SARIF to GitHub Security Tab
+  uses: github/codeql-action/upload-sarif@v3
+  if: always()
+  with:
+    sarif_file: apipatch-results.sarif</code></pre>
+        </div>
+
+        <h2 id="airgapped">Air-Gapped & Offline Execution</h2>
+        <p>For strictly air-gapped enterprise build agents, ApiPatch supports offline execution with zero network egress:</p>
+        <div class="code-block">
+          <div class="code-header"><span class="code-lang">BASH</span></div>
+          <pre><code>apipatch scan --all --offline --no-telemetry</code></pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div>© 2026 fix2ship · ApiPatch Autonomous Migration Engine. All rights reserved.</div>
+      <div>
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none; margin-right: 1.25rem;">Home</a>
+        <a href="https://github.com/fix2ship/apipatch" target="_blank" rel="noopener" style="color: var(--text-muted); text-decoration: none;">GitHub Repository</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copySnippet(id, btn) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText.trim()).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.color = '#10b981';
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.color = '';
+        }, 2000);
+      });
+    }
+
+    function filterDocs() {
+      const q = document.getElementById('docSearch').value.toLowerCase();
+      const links = document.querySelectorAll('.sidebar-link');
+      links.forEach(l => {
+        const text = l.innerText.toLowerCase();
+        l.parentElement.style.display = text.includes(q) ? 'block' : 'none';
+      });
+    }
+
+    // Highlight active link on scroll
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('.doc-section');
+      const scrollPos = window.scrollY + 160;
+      sections.forEach(s => {
+        const top = s.offsetTop;
+        const height = s.offsetHeight;
+        const id = s.getAttribute('id');
+        if (scrollPos >= top && scrollPos < top + height) {
+          document.querySelectorAll('.sidebar-link').forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
